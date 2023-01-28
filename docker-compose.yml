@@ -1,10 +1,15 @@
-version: "3.9"
+version: '3.3'
+
 services:
-  php-apache:
-    ports:
-      - 4000:80
-    build: 
+  app:
+    image: "nextjs"
+    container_name: "nextjs"
+    build:
       context: .
       dockerfile: Dockerfile
-    volumes:
-      - ./app:/var/www/html
+    ports:
+      - 4100:4100
+
+networks:
+  server:
+    external: true
