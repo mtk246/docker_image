@@ -4,9 +4,11 @@ services:
   app:
     image: "nextjs"
     container_name: "nextjs"
+    # not require this line if you .gitlab-ci.yml or .github-ci.yml exists
     build:
       context: .
       dockerfile: Dockerfile
+    # not require this line if you .gitlab-ci.yml or .github-ci.yml exists
     ports:
       - 4100:4100 #setup port for docker container here
 

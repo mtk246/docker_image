@@ -1,0 +1,53 @@
+# .gitlab-ci.yml
+variables:
+  TEST_IMAGE: node:18.13.0-alpine
+  BUILD_IMAGE: docker:dind
+  ENV_FILE: $ENV
+
+before_script:
+  - echo "$ENV" > .env.local
+
+stages:
+  - test
+  - build
+  - deploy
+
+test-job:
+  stage: test
+  image: $TEST_IMAGE
+  tags:
+    - docker
+  before_script:
+    - apk add make
+    - npm install
+  script:
+    - make -B test
+
+build-job:
+  stage: build
+  tags:
+    - ubuntu
+  script:
+    - docker login <container_name> -p <password>
+    - docker build . --file Dockerfile --tag <container_name>/$CI_PROJECT_NAME:$CI_COMMIT_BRANCH
+    - docker push <container_name>/$CI_PROJECT_NAME:$CI_COMMIT_BRANCH
+
+deploy-dev-job:
+  stage: deploy
+  image: docker/compose
+  only:
+    - dev
+  tags:
+    - ubuntu
+  script:
+    - docker login <container_name> -u <container_user_name> -p <password>
+    - docker-compose up -d
+
+deploy-prod-job:
+  stage: deploy
+  tags:
+    - ubuntu
+  only:
+    - master
+  script:
+    - docker-compose up -d
