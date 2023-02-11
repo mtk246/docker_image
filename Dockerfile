@@ -44,8 +44,10 @@ RUN chown -R nextjs:nodejs ./.next
 
 USER nextjs
 
+# setup docker container port here
 EXPOSE 4100
 
 ENV PORT 4100
+# end setup docker container port
 
 CMD ["yarn", "start"]
