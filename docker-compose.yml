@@ -2,7 +2,7 @@ version: "3.9"
 services:
   php-apache:
     ports:
-      - 4000:80
+      - 4000:80 # change tcp port here, example 4000:80, 4001:80 for localhost:4000 or localhost:4001
     build: 
       context: .
       dockerfile: Dockerfile
